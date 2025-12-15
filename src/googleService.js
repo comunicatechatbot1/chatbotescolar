@@ -3,40 +3,7 @@ import { google } from 'googleapis'
 
 class GoogleService {
     constructor() {
-        // Procesar credenciales manejando caracteres de nueva línea en private_key
-        let credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON || '{}'
-
-        // Debug: mostrar los primeros caracteres para diagnosticar
-        console.log('🔍 GOOGLE_APPLICATION_CREDENTIALS_JSON length:', credentialsJson.length)
-        console.log('🔍 First 50 chars:', credentialsJson.substring(0, 50))
-
-        // Eliminar comillas simples o dobles que envuelvan el JSON (Railway a veces las agrega)
-        credentialsJson = credentialsJson.trim()
-        if ((credentialsJson.startsWith("'") && credentialsJson.endsWith("'")) ||
-            (credentialsJson.startsWith('"') && credentialsJson.endsWith('"'))) {
-            credentialsJson = credentialsJson.slice(1, -1)
-            console.log('🔍 Removed wrapping quotes')
-        }
-
-        // Reemplazar \n literales (escapados) por saltos de línea reales en el private_key
-        // Esto es necesario porque Railway y otros servicios a veces escapan los \n
-        credentialsJson = credentialsJson.replace(/\\\\n/g, '\\n')
-
-        let credentials
-        try {
-            credentials = JSON.parse(credentialsJson)
-        } catch (parseError) {
-            console.error('❌ Error parsing GOOGLE_APPLICATION_CREDENTIALS_JSON:', parseError.message)
-            console.error('❌ Raw value (first 200 chars):', credentialsJson.substring(0, 200))
-            throw new Error(`Failed to parse Google credentials: ${parseError.message}`)
-        }
-
-        // Asegurar que el private_key tenga los saltos de línea correctos
-        if (credentials.private_key) {
-            credentials.private_key = credentials.private_key.replace(/\\n/g, '\n')
-        }
-
-        console.log('✅ Google credentials parsed successfully for project:', credentials.project_id)
+        const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
         this.auth = new GoogleAuth({
             credentials,
             scopes: [
