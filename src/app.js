@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { createBot, createProvider, createFlow, addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
-import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
+import { SherpaProvider as Provider } from '@builderbot/provider-sherpa'
 import googleService from './googleService.js'
 import groqService from './ai-chat.js'
 import chatHistoryService from './chat-history.js'
