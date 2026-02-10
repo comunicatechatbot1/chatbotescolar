@@ -153,7 +153,7 @@ EJEMPLO DE RESPUESTAS CORRECTAS:
         })
         return `📚 *Sistema de Agendamiento de Citas*
 
-Indícame el número de identificación del estudiante para proceder a agendar tu cita con un docente.
+Indícame el número de matricula del estudiante para proceder a agendar tu cita con un docente.
 
 _Escribe 'cancelar' en cualquier momento para salir del proceso._`
     }
@@ -254,7 +254,7 @@ _Escribe 'cancelar' en cualquier momento para salir del proceso._`
 
                 const studentId = text.trim()
                 if (!studentId || studentId.length < 3) {
-                    return 'Por favor indica el número de identificación del estudiante.\n\n_Escribe el ID o "salir" para cancelar._'
+                    return 'Por favor indica el número de matricula del estudiante.\n\n_Escribe el ID o "salir" para cancelar._'
                 }
 
                 // Buscar citas por ID del estudiante
@@ -366,7 +366,7 @@ _Escribe 'cancelar' en cualquier momento para salir del proceso._`
                         state: 'collecting_student_id',
                         data: { ...session.data, attempts: newAttempts, lastActivity: new Date().toISOString() }
                     })
-                    return `❌ No encontré un estudiante con ID: ${text}\n\n⚠️ Intento ${newAttempts} de ${GroqService.MAX_ATTEMPTS}. Por favor verifica el número de identificación.`
+                    return `❌ No encontré un estudiante con ID: ${text}\n\n⚠️ Intento ${newAttempts} de ${GroqService.MAX_ATTEMPTS}. Por favor verifica el número de matrícula.`
                 }
 
                 // Obtener docentes asignados al estudiante
@@ -781,7 +781,7 @@ _Escribe 'cancelar' en cualquier momento para salir del proceso._`
                     state: 'awaiting_cancel_id',
                     data: {}
                 })
-                return 'Indica el número de identificación del estudiante cuya cita deseas cancelar.\n\n_Escribe el ID del estudiante o "salir" para cancelar._'
+                return 'Indica el número de matricula del estudiante cuya cita deseas cancelar.\n\n_Escribe el ID del estudiante o "salir" para cancelar._'
             }
 
             // Reprogramar cita
