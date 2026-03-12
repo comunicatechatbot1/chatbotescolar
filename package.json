@@ -16,13 +16,13 @@
   "dependencies": {
     "@builderbot/bot": "1.3.15",
     "@builderbot/provider-sherpa": "1.3.15",
-    "dotenv": "^17.2.3",
-    "google-auth-library": "^10.5.0",
-    "googleapis": "^171.2.0",
-    "groq-sdk": "^0.37.0"
+    "dotenv": "^17.3.1",
+    "google-auth-library": "^10.6.1",
+    "googleapis": "^171.4.0",
+    "groq-sdk": "^1.1.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.14"
   },
   "author": "",
   "license": "ISC"

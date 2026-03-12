@@ -115,7 +115,7 @@ const main = async () => {
 
 
     const adapterFlow = createFlow([dynamicFlow])
-    const adapterProvider = createProvider(Provider, { version: [2, 3000, 1029030078] })
+    const adapterProvider = createProvider(Provider, { version: [2, 3000, 1033927531] })
     const adapterDB = new Database()
 
     const { handleCtx, httpServer } = await createBot({
