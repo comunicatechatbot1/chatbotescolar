@@ -4,6 +4,7 @@
   "description": "Sistema de agendamiento escolar via WhatsApp",
   "main": "src/app.js",
   "type": "module",
+  "packageManager": "pnpm@10.5.2",
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "nodemon ./src/app.js"
@@ -14,15 +15,40 @@
     "agendamiento"
   ],
   "dependencies": {
-    "@builderbot/bot": "1.3.15",
-    "@builderbot/provider-sherpa": "1.3.15",
-    "dotenv": "^17.3.1",
-    "google-auth-library": "^10.6.1",
-    "googleapis": "^171.4.0",
-    "groq-sdk": "^1.1.1"
+    "@builderbot/bot": "1.4.1",
+    "@builderbot/provider-baileys": "1.4.1",
+    "dotenv": "^17.4.2",
+    "google-auth-library": "^10.6.2",
+    "googleapis": "^172.0.0",
+    "groq-sdk": "^1.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "overrides": {
+    "axios": "0.31.1",
+    "jimp": "1.6.1",
+    "music-metadata": "11.12.3",
+    "protobufjs": "7.6.1",
+    "sharp": "0.33.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "axios": "0.31.1",
+      "music-metadata": "11.12.3",
+      "protobufjs": "7.6.1"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "jimp": "1.6.1",
+        "sharp": "0.33.3"
+      }
+    },
+    "onlyBuiltDependencies": [
+      "baileys",
+      "protobufjs",
+      "sharp"
+    ]
   },
   "author": "",
   "license": "ISC"

@@ -3,7 +3,9 @@ import { google } from 'googleapis'
 
 class GoogleService {
     constructor() {
-        const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
+        const credentials = this.getGoogleCredentials()
+        this.sheetId = this.getRequiredEnv('SHEET_ID')
+        this.calendarId = process.env.CALENDAR_ID || 'primary' // Configurar en .env
         this.auth = new GoogleAuth({
             credentials,
             scopes: [
@@ -14,9 +16,6 @@ class GoogleService {
         this.sheets = google.sheets({ version: 'v4', auth: this.auth })
         this.calendar = google.calendar({ version: 'v3', auth: this.auth })
 
-        this.sheetId = process.env.SHEET_ID
-        this.calendarId = process.env.CALENDAR_ID || 'primary' // Configurar en .env
-
         // Caché similar a sheets.js
         this.flowsCache = null
         this.promptsCache = null
@@ -25,6 +24,53 @@ class GoogleService {
         this.lastPromptsFetch = 0
         this.lastScheduledMessagesFetch = 0
         this.cacheDuration = 5 * 60 * 1000
+    }
+
+    getRequiredEnv(name) {
+        const value = process.env[name]
+        if (!value || !value.trim()) {
+            throw new Error(
+                `Falta la variable ${name}. Crea un archivo .env basado en env.example y completa ese valor.`
+            )
+        }
+        return value.trim()
+    }
+
+    getGoogleCredentials() {
+        const rawCredentials = this.getRequiredEnv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
+
+        try {
+            const credentials = this.parseCredentialsJson(rawCredentials)
+            if (!credentials.client_email || !credentials.private_key) {
+                throw new Error('faltan client_email o private_key')
+            }
+            return credentials
+        } catch (error) {
+            throw new Error(
+                'GOOGLE_APPLICATION_CREDENTIALS_JSON no contiene un JSON valido de Service Account. ' +
+                'Copia el JSON completo en una sola linea dentro de .env. ' +
+                `Detalle: ${error.message}`
+            )
+        }
+    }
+
+    parseCredentialsJson(rawCredentials) {
+        const unescapedQuotes = rawCredentials.replace(/\\"/g, '"')
+        const candidates = [
+            rawCredentials,
+            unescapedQuotes,
+            unescapedQuotes.replace(/\\\r?\n/g, '\\n'),
+        ]
+
+        for (const candidate of candidates) {
+            try {
+                return JSON.parse(candidate)
+            } catch {
+                // Try the next supported .env representation.
+            }
+        }
+
+        return JSON.parse(rawCredentials)
     }
 
     async verifyCalendarAccess() {

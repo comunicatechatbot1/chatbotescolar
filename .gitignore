@@ -120,6 +120,7 @@ bot_sessions/
 
 # QR code
 bot.qr.png
+baileys.log
 
 # Chat history (privacy)
 chat_history/

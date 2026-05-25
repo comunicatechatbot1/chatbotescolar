@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { createBot, createProvider, createFlow, addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
-import { SherpaProvider as Provider } from '@builderbot/provider-sherpa'
+import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
 import googleService from './googleService.js'
 import groqService from './ai-chat.js'
 import chatHistoryService from './chat-history.js'
@@ -115,7 +115,11 @@ const main = async () => {
 
 
     const adapterFlow = createFlow([dynamicFlow])
-    const adapterProvider = createProvider(Provider, { version: [2, 3000, 1035824857] })
+    const adapterProvider = createProvider(Provider, {
+        version: [2, 3000, 1035824857],
+        experimentalStore: true,
+        timeRelease: 3 * 60 * 60 * 1000,
+    })
     const adapterDB = new Database()
 
     const { handleCtx, httpServer } = await createBot({

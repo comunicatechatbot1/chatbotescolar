@@ -5,3 +5,6 @@ node_modules
 *_sessions
 *tokens
 .wwebjs*
+bot.qr.png
+baileys.log
+chat_history

@@ -1,24 +1,24 @@
 # Image size ~ 400MB
-FROM node:21-alpine3.18 as builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.5.2 --activate
 ENV PNPM_HOME=/usr/local/bin
 
-COPY . .
-
-COPY package*.json *-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
 RUN apk add --no-cache --virtual .gyp \
         python3 \
         make \
         g++ \
     && apk add --no-cache git \
-    && pnpm install \
+    && pnpm install --frozen-lockfile \
     && apk del .gyp
 
-FROM node:21-alpine3.18 as deploy
+COPY . .
+
+FROM node:24-alpine AS deploy
 
 WORKDIR /app
 
@@ -27,12 +27,11 @@ ENV PORT $PORT
 EXPOSE $PORT
 
 COPY --from=builder /app ./
-COPY --from=builder /app/*.json /app/*-lock.yaml ./
 
-RUN corepack enable && corepack prepare pnpm@latest --activate 
+RUN corepack enable && corepack prepare pnpm@10.5.2 --activate
 ENV PNPM_HOME=/usr/local/bin
 
-RUN npm cache clean --force && pnpm install --production --ignore-scripts \
+RUN npm cache clean --force && pnpm install --prod --frozen-lockfile --ignore-scripts \
     && addgroup -g 1001 -S nodejs && adduser -S -u 1001 nodejs \
     && rm -rf $PNPM_HOME/.npm $PNPM_HOME/.node-gyp
 
